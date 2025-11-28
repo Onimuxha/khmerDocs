@@ -131,6 +131,26 @@ export function LessonContent({ languages, highlightedLessonId }: LessonContentP
                           })}
                         </div>
 
+                        {lesson.images && lesson.images.length > 0 && (
+                          <div className="my-6 space-y-4">
+                            {lesson.images.map((image, imgIndex) => (
+                              <div key={imgIndex} className="flex flex-col items-center">
+                                <img
+                                  src={image.url}
+                                  alt={image.alt}
+                                  className="max-w-md h-auto rounded-lg border border-border shadow-sm"
+                                  data-testid={`image-${lesson.id}-${imgIndex}`}
+                                />
+                                {image.caption && (
+                                  <p className="text-sm text-muted-foreground mt-2 text-center italic">
+                                    {image.caption}
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
                         {lesson.codeBlocks && lesson.codeBlocks.length > 0 && (
                           <div className="mt-4">
                             {lesson.codeBlocks.map((block, blockIndex) => (

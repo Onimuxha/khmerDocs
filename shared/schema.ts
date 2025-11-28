@@ -10,6 +10,11 @@ export const lessonSchema = z.object({
     code: z.string(),
     filename: z.string().optional(),
   })).optional(),
+  images: z.array(z.object({
+    url: z.string(),
+    alt: z.string(),
+    caption: z.string().optional(),
+  })).optional(),
 });
 
 export type Lesson = z.infer<typeof lessonSchema>;

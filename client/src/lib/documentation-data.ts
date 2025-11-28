@@ -18,6 +18,13 @@ export const documentationData: ProgrammingLanguage[] = [
             content: `ភាសា C គឺជាភាសាសរសេរកម្មវិធីដែលមានអានុភាពខ្លាំង និងប្រើប្រាស់ទូលំទូលាយបំផុតមួយក្នុងពិភពលោក។ វាត្រូវបានបង្កើតឡើងដោយ Dennis Ritchie នៅក្នុងឆ្នាំ 1972 នៅ Bell Labs។
 
 ភាសា C ត្រូវបានប្រើសម្រាប់បង្កើតប្រព័ន្ធប្រតិបត្តិការ កម្មវិធីបង្កប់ និងកម្មវិធីដែលត្រូវការល្បឿនខ្ពស់។`,
+            images: [
+              {
+                url: "https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png",
+                alt: "ロゴ C",
+                caption: "ឡូហ្គូ C"
+              }
+            ],
             codeBlocks: [
               {
                 language: "c",
@@ -196,6 +203,13 @@ int main() {
             id: "cpp-classes",
             title: "Class និង Object",
             content: `Class គឺជាគំរូសម្រាប់បង្កើត objects។ វាអាចមាន attributes (អថេរ) និង methods (អនុគមន៍) ខាងក្នុង។`,
+            images: [
+              {
+                url: "https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg",
+                alt: "ឡូហ្គូ C++",
+                caption: "ឡូហ្គូ C++"
+              }
+            ],
             codeBlocks: [
               {
                 language: "cpp",
