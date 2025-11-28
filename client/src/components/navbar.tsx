@@ -4,7 +4,6 @@ import { Menu, X, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SearchBar } from "@/components/search-bar";
-import { LanguageIcon } from "@/components/language-icons";
 import { KeyboardShortcutsDialog } from "@/components/keyboard-shortcuts-dialog";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,8 +15,6 @@ const navLinks = [
   { href: "/about", label: "អំពីយើង" },
   { href: "/contact", label: "ទំនាក់ទំនង" },
 ];
-
-const programmingLanguages = ["c", "cpp", "csharp", "python", "html", "css", "javascript", "react"];
 
 interface NavbarProps {
   onSearchResult?: (result: SearchResult) => void;
@@ -78,20 +75,6 @@ export function Navbar({ onSearchResult, onMobileMenuToggle, isMobileMenuOpen }:
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden md:flex items-center gap-1.5 mr-2">
-              {programmingLanguages.map((lang) => (
-                <Link key={lang} href={`/docs/${lang}`}>
-                  <button
-                    className="p-1.5 rounded-md hover:bg-accent transition-colors"
-                    title={lang.toUpperCase()}
-                    data-testid={`button-lang-${lang}`}
-                  >
-                    <LanguageIcon language={lang} size="sm" />
-                  </button>
-                </Link>
-              ))}
-            </div>
-
             <div className="hidden sm:block">
               <SearchBar onResultClick={handleSearchResult} />
             </div>

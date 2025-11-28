@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, Github } from "lucide-react";
+import { Mail, MessageSquare, Github, Send } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,9 +19,9 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 const contactSchema = z.object({
-  name: z.string().min(1, "សូមបញ្ចូលឈ្មោះ"),
-  email: z.string().email("អ៊ីមែលមិនត្រឹមត្រូវ"),
-  message: z.string().min(10, "សារត្រូវមានយ៉ាងហោចណាស់ 10 តួអក្សរ"),
+  name: z.string().optional(),
+  email: z.string().email("អ៊ីមែលមិនត្រឹមត្រូវ").optional().or(z.literal("")),
+  message: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -149,6 +149,28 @@ export default function ContactPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="space-y-4"
             >
+              <Card className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Send className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Telegram</h3>
+                    <p className="text-sm text-muted-foreground">ចូលរួម Community របស់យើង</p>
+                  </div>
+                </div>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full"
+                  data-testid="button-telegram"
+                >
+                  <a href="https://t.me/khmerdocs" target="_blank" rel="noopener noreferrer">
+                    ចូល Telegram
+                  </a>
+                </Button>
+              </Card>
+
               <Card className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
