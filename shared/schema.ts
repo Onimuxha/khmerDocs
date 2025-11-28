@@ -1,18 +1,65 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+// Lesson structure
+export const lessonSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  content: z.string(),
+  codeBlocks: z.array(z.object({
+    language: z.string(),
+    code: z.string(),
+    filename: z.string().optional(),
+  })).optional(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export type Lesson = z.infer<typeof lessonSchema>;
+
+// Chapter structure
+export const chapterSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  lessons: z.array(lessonSchema),
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type Chapter = z.infer<typeof chapterSchema>;
+
+// Programming Language structure
+export const programmingLanguageSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  nameEn: z.string(),
+  icon: z.string(),
+  color: z.string(),
+  chapters: z.array(chapterSchema),
+});
+
+export type ProgrammingLanguage = z.infer<typeof programmingLanguageSchema>;
+
+// Documentation structure
+export const documentationSchema = z.object({
+  languages: z.array(programmingLanguageSchema),
+});
+
+export type Documentation = z.infer<typeof documentationSchema>;
+
+// Search result structure
+export const searchResultSchema = z.object({
+  type: z.enum(["language", "chapter", "lesson"]),
+  languageId: z.string(),
+  chapterId: z.string().optional(),
+  lessonId: z.string().optional(),
+  title: z.string(),
+  subtitle: z.string().optional(),
+  content: z.string().optional(),
+});
+
+export type SearchResult = z.infer<typeof searchResultSchema>;
+
+// Navigation state for scrollspy
+export const navigationStateSchema = z.object({
+  activeLanguageId: z.string().nullable(),
+  activeChapterId: z.string().nullable(),
+  activeLessonId: z.string().nullable(),
+});
+
+export type NavigationState = z.infer<typeof navigationStateSchema>;
