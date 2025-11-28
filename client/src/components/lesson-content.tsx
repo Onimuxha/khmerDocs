@@ -11,9 +11,10 @@ import type { ProgrammingLanguage } from "@shared/schema";
 
 interface LessonContentProps {
   languages: ProgrammingLanguage[];
+  highlightedLessonId?: string | null;
 }
 
-export function LessonContent({ languages }: LessonContentProps) {
+export function LessonContent({ languages, highlightedLessonId }: LessonContentProps) {
   const activeSection = useScrollspy();
   const currentLanguage = languages[0] || documentationData[0];
 
@@ -66,7 +67,9 @@ export function LessonContent({ languages }: LessonContentProps) {
                     {chapter.title}
                   </h2>
 
-                  {chapter.lessons.map((lesson, lessonIndex) => (
+                  {chapter.lessons.map((lesson, lessonIndex) => {
+                    const isHighlighted = highlightedLessonId === lesson.id;
+                    return (
                     <section
                       key={lesson.id}
                       id={lesson.id}
@@ -77,7 +80,14 @@ export function LessonContent({ languages }: LessonContentProps) {
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-30px" }}
-                        transition={{ duration: 0.25, delay: lessonIndex * 0.02 }}
+                        animate={isHighlighted ? {
+                          boxShadow: [
+                            "0 0 0 0px rgba(59, 130, 246, 0.6)",
+                            "0 0 0 8px rgba(59, 130, 246, 0.3)",
+                            "0 0 0 12px rgba(59, 130, 246, 0)"
+                          ]
+                        } : {}}
+                        transition={isHighlighted ? { duration: 0.8 } : { duration: 0.25, delay: lessonIndex * 0.02 }}
                         className="bg-card border rounded-lg p-6"
                       >
                         <Breadcrumb
@@ -135,7 +145,8 @@ export function LessonContent({ languages }: LessonContentProps) {
                         )}
                       </motion.div>
                     </section>
-                  ))}
+                    );
+                  })}
                 </motion.div>
               </section>
             ))}

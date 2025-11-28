@@ -12,6 +12,7 @@ import type { SearchResult, NavigationState } from "@shared/schema";
 export default function DocsPage() {
   const [match, params] = useRoute("/docs/:languageId");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [highlightedLessonId, setHighlightedLessonId] = useState<string | null>(null);
   const activeSection = useScrollspy();
 
   const languageId = (params?.languageId as string | undefined) || null;
@@ -27,6 +28,10 @@ export default function DocsPage() {
   const handleNavigate = useCallback(
     (langId: string, chapterId?: string, lessonId?: string) => {
       const targetId = lessonId || chapterId || langId;
+      if (lessonId) {
+        setHighlightedLessonId(lessonId);
+        setTimeout(() => setHighlightedLessonId(null), 2000);
+      }
       scrollToSection(targetId);
     },
     []
@@ -34,6 +39,10 @@ export default function DocsPage() {
 
   const handleSearchResult = useCallback((result: SearchResult) => {
     const targetId = result.lessonId || result.chapterId || result.languageId;
+    if (result.lessonId) {
+      setHighlightedLessonId(result.lessonId);
+      setTimeout(() => setHighlightedLessonId(null), 2000);
+    }
     scrollToSection(targetId);
   }, []);
 
@@ -68,7 +77,7 @@ export default function DocsPage() {
               </p>
             </div>
 
-            <LessonContent languages={[currentLanguage]} />
+            <LessonContent languages={[currentLanguage]} highlightedLessonId={highlightedLessonId} />
           </motion.div>
         </main>
       </div>

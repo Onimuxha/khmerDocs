@@ -8,7 +8,7 @@ import type { Lesson } from "@shared/schema";
 
 interface TableOfContentsProps {
   lessons: Lesson[];
-  activeLessonId?: string;
+  activeLessonId?: string | null;
 }
 
 export function TableOfContents({ lessons, activeLessonId }: TableOfContentsProps) {
