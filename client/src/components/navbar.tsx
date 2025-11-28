@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SearchBar } from "@/components/search-bar";
 import { LanguageIcon } from "@/components/language-icons";
+import { KeyboardShortcutsDialog } from "@/components/keyboard-shortcuts-dialog";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SearchResult } from "@shared/schema";
@@ -118,6 +119,7 @@ export function Navbar({ onSearchResult, onMobileMenuToggle, isMobileMenuOpen }:
               </svg>
             </Button>
 
+            <KeyboardShortcutsDialog />
             <ThemeToggle />
           </div>
         </div>

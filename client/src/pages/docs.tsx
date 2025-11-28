@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
 import { LessonContent } from "@/components/lesson-content";
 import { useScrollspy, scrollToSection } from "@/hooks/use-scrollspy";
+import { useKeyboardNavigation } from "@/hooks/use-keyboard-navigation";
 import { documentationData } from "@/lib/documentation-data";
 import type { SearchResult, NavigationState } from "@shared/schema";
 
@@ -19,6 +20,9 @@ export default function DocsPage() {
     if (!languageId) return documentationData[0];
     return documentationData.find((lang) => lang.id === languageId) || documentationData[0];
   }, [languageId]);
+
+  // Setup keyboard navigation
+  useKeyboardNavigation(currentLanguage.id);
 
   const handleNavigate = useCallback(
     (langId: string, chapterId?: string, lessonId?: string) => {

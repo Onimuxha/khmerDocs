@@ -1,6 +1,12 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { CodeBlock } from "@/components/code-block";
 import { LanguageIcon } from "@/components/language-icons";
+import { LessonHeader } from "@/components/lesson-header";
+import { TableOfContents } from "@/components/table-of-contents";
+import { Breadcrumb } from "@/components/breadcrumb";
+import { useScrollspy } from "@/hooks/use-scrollspy";
+import { documentationData } from "@/lib/documentation-data";
 import type { ProgrammingLanguage } from "@shared/schema";
 
 interface LessonContentProps {
@@ -8,6 +14,14 @@ interface LessonContentProps {
 }
 
 export function LessonContent({ languages }: LessonContentProps) {
+  const activeSection = useScrollspy();
+  const currentLanguage = languages[0] || documentationData[0];
+
+  // Get all lessons in current language for TOC
+  const allLessons = useMemo(() => {
+    return currentLanguage.chapters.flatMap((ch) => ch.lessons);
+  }, [currentLanguage]);
+
   return (
     <div className="pb-32">
       {languages.map((language, langIndex) => (
@@ -29,6 +43,8 @@ export function LessonContent({ languages }: LessonContentProps) {
                 {language.name}
               </h1>
             </div>
+
+            <TableOfContents lessons={allLessons} activeLessonId={activeSection.activeLessonId} />
 
             {language.chapters.map((chapter, chapterIndex) => (
               <section
@@ -64,12 +80,21 @@ export function LessonContent({ languages }: LessonContentProps) {
                         transition={{ duration: 0.25, delay: lessonIndex * 0.02 }}
                         className="bg-card border rounded-lg p-6"
                       >
-                        <h3
-                          className="text-xl font-medium mb-4 text-foreground"
-                          data-testid={`heading-lesson-${lesson.id}`}
-                        >
-                          {lesson.title}
-                        </h3>
+                        <Breadcrumb
+                          languageName={language.name}
+                          languageId={language.id}
+                          chapterTitle={chapter.title}
+                          chapterId={chapter.id}
+                          lessonTitle={lesson.title}
+                          lessonId={lesson.id}
+                        />
+
+                        <LessonHeader
+                          lessonId={lesson.id}
+                          lessonTitle={lesson.title}
+                          languageId={language.id}
+                          chapterId={chapter.id}
+                        />
 
                         <div className="prose-docs">
                           {lesson.content.split("\n\n").map((paragraph, pIndex) => {
