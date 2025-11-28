@@ -79,19 +79,15 @@ export function Navbar({ onSearchResult, onMobileMenuToggle, isMobileMenuOpen }:
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-1.5 mr-2">
               {programmingLanguages.map((lang) => (
-                <button
-                  key={lang}
-                  className="p-1.5 rounded-md hover:bg-accent transition-colors"
-                  title={lang.toUpperCase()}
-                  onClick={() => handleSearchResult({
-                    type: "language",
-                    languageId: lang,
-                    title: lang,
-                  })}
-                  data-testid={`button-lang-${lang}`}
-                >
-                  <LanguageIcon language={lang} size="sm" />
-                </button>
+                <Link key={lang} href={`/docs/${lang}`}>
+                  <button
+                    className="p-1.5 rounded-md hover:bg-accent transition-colors"
+                    title={lang.toUpperCase()}
+                    data-testid={`button-lang-${lang}`}
+                  >
+                    <LanguageIcon language={lang} size="sm" />
+                  </button>
+                </Link>
               ))}
             </div>
 

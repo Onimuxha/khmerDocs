@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { useRoute } from "wouter";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
@@ -8,12 +9,20 @@ import { documentationData } from "@/lib/documentation-data";
 import type { SearchResult, NavigationState } from "@shared/schema";
 
 export default function DocsPage() {
+  const [match, params] = useRoute("/docs/:languageId");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const activeSection = useScrollspy();
 
+  const languageId = (params?.languageId as string | undefined) || null;
+
+  const currentLanguage = useMemo(() => {
+    if (!languageId) return documentationData[0];
+    return documentationData.find((lang) => lang.id === languageId) || documentationData[0];
+  }, [languageId]);
+
   const handleNavigate = useCallback(
-    (languageId: string, chapterId?: string, lessonId?: string) => {
-      const targetId = lessonId || chapterId || languageId;
+    (langId: string, chapterId?: string, lessonId?: string) => {
+      const targetId = lessonId || chapterId || langId;
       scrollToSection(targetId);
     },
     []
@@ -38,6 +47,7 @@ export default function DocsPage() {
           onClose={() => setSidebarOpen(false)}
           activeSection={activeSection}
           onNavigate={handleNavigate}
+          currentLanguageId={currentLanguage.id}
         />
 
         <main className="flex-1 min-w-0">
@@ -50,11 +60,11 @@ export default function DocsPage() {
             <div className="mb-8">
               <h1 className="text-3xl font-bold mb-2">ឯកសារសរសេរកូដ</h1>
               <p className="text-muted-foreground">
-                រៀនភាសាកម្មវិធីជាភាសាខ្មែរ - ពី C ដល់ React.js
+                រៀនភាសាកម្មវិធីជាភាសាខ្មែរ
               </p>
             </div>
 
-            <LessonContent languages={documentationData} />
+            <LessonContent languages={[currentLanguage]} />
           </motion.div>
         </main>
       </div>

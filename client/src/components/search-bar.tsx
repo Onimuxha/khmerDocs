@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useLocation } from "wouter";
 import { Search, FileText, FolderOpen, Code } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Fuse from "fuse.js";
 import { getSearchableItems } from "@/lib/documentation-data";
+import { scrollToSection } from "@/hooks/use-scrollspy";
 import type { SearchResult } from "@shared/schema";
 
 interface SearchBarProps {
-  onResultClick: (result: SearchResult) => void;
+  onResultClick?: (result: SearchResult) => void;
   className?: string;
 }
 
@@ -18,6 +20,7 @@ export function SearchBar({ onResultClick, className }: SearchBarProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [, navigate] = useLocation();
 
   const searchableItems = useMemo(() => getSearchableItems(), []);
   
@@ -104,15 +107,27 @@ export function SearchBar({ onResultClick, className }: SearchBarProps) {
   };
 
   const handleResultClick = (result: typeof results[0]) => {
-    onResultClick({
-      type: result.type,
-      languageId: result.languageId,
-      chapterId: result.chapterId,
-      lessonId: result.lessonId,
-      title: result.title,
-      subtitle: result.subtitle,
-      content: result.content,
-    });
+    // Navigate to the language page if result is from a different language
+    navigate(`/docs/${result.languageId}`);
+    
+    // Scroll to the section after navigation
+    setTimeout(() => {
+      const targetId = result.lessonId || result.chapterId || result.languageId;
+      scrollToSection(targetId);
+    }, 100);
+
+    if (onResultClick) {
+      onResultClick({
+        type: result.type,
+        languageId: result.languageId,
+        chapterId: result.chapterId,
+        lessonId: result.lessonId,
+        title: result.title,
+        subtitle: result.subtitle,
+        content: result.content,
+      });
+    }
+
     setQuery("");
     setIsOpen(false);
     inputRef.current?.blur();
